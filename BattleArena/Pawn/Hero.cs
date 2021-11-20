@@ -6,11 +6,11 @@ namespace BattleArena.Pawn
 {
     public class Hero
     {
-       
-        private readonly IEquipment weapon;
+        LoggingSystem logsys = LoggingSystem.getInstance();
+        private IEquipment _weapon;
         private int lastKeyInput;
         private List<Goblin> goblins = new List<Goblin>();
-
+        public string weaponName { get; private set; }
         public int Health { get; private set; } = 100;
         public int Coins { get; private set; } = 1;
         public int NumberOfGoblins => this.goblins.Count;
@@ -21,14 +21,21 @@ namespace BattleArena.Pawn
         public Hero(string name, IEquipment equipment)
         {
             this.Name = name;
-            this.weapon = equipment;
-
+            this._weapon = equipment;
+            weaponName = this._weapon.Name;
             this.lastKeyInput = -1;
         }
 
         public bool Action(Hero other)
         {
-            this.weapon.Use(other);
+            this._weapon.Use(other);
+            return true;
+        }
+
+        public bool switchWeapon(IEquipment weapon)
+        {
+            _weapon = weapon;
+            weaponName = this._weapon.Name;
             return true;
         }
 
@@ -67,6 +74,7 @@ namespace BattleArena.Pawn
             {
                 this.Coins -= 1;
                 this.goblins.Add(new Goblin(1, randomNumberGenerator));
+                logsys.createLog("Tiny Goblin", Name, DateTime.Now);
                 return true;
             }
             return false;
@@ -78,6 +86,7 @@ namespace BattleArena.Pawn
             {
                 this.Coins -= 3;
                 this.goblins.Add(new Goblin(2, randomNumberGenerator));
+                logsys.createLog("Medium Goblin", Name, DateTime.Now);
                 return true;
             }
             return false;
@@ -89,6 +98,7 @@ namespace BattleArena.Pawn
             {
                 this.Coins -= 6;
                 this.goblins.Add(new Goblin(3, randomNumberGenerator));
+                logsys.createLog("Big Goblin", Name, DateTime.Now);
                 return true;
             }
             return false;

@@ -16,21 +16,22 @@ namespace BattleArena
             Console.WriteLine("| 3: Create a new tiny goblin   ( 1 Coin  )");
             Console.WriteLine("| 4: Create a new medium goblin ( 3 Coins )");
             Console.WriteLine("| 5: Create a new big goblin    ( 6 Coins )");
+            Console.WriteLine("| 6: Switch weapon    ( You can make a second move this turn )");
             Console.WriteLine("+--------------------------------------->  ");
         }
 
         public void PrintPlayerInformation(Hero[] playerList)
         {
-            Console.WriteLine("####################################################################");
+            Console.WriteLine("#########################################################################################");
             foreach(Hero player in playerList)
             {
 
                 Console.WriteLine("## " + player.Name + " | Health: " + player.Health + " | Coins: "
                         + player.Coins+ " | Leprechaun: " + player.Leprechaun + " | Goblins: "
-                        + player.NumberOfGoblins);
+                        + player.NumberOfGoblins + " | Weapon: " + player.weaponName);
 
             }
-            Console.WriteLine("####################################################################\n");
+            Console.WriteLine("#########################################################################################\n");
         }
 
         public int GetUserIput()

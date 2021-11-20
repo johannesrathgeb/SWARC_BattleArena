@@ -1,4 +1,5 @@
 ﻿using BattleArena.Items;
+using BattleArena.Items.OldVersion;
 using BattleArena.Pawn;
 using System;
 
@@ -6,12 +7,17 @@ namespace BattleArena
 {
     class Program
     {
+        //TODO
+        //Weapon switch, zweite action
+        //Singleton loggen
+        //Observer
         static void Main(string[] args)
         {
+            LoggingSystem logsys = LoggingSystem.getInstance();
             UserIO userinteraction = new UserIO();
 
             Random randomNumberGenerator = new Random();
-            Hero[] playerList = { new Hero("Player 1", new CynradBow(randomNumberGenerator)),
+            Hero[] playerList = { new Hero("Player 1", new LatharSwordAdapter(randomNumberGenerator)),
                 new Hero("Player 2", new CynradBow(randomNumberGenerator)) };
 
             bool run = true;
@@ -32,7 +38,7 @@ namespace BattleArena
                         {
                             userinteraction.PrintFightMenu(currentHero.Name);
                             userinput = userinteraction.GetUserIput();
-                        } while (userinput < 0 || userinput > 5);
+                        } while (userinput < 0 || userinput > 6);
 
                         switch (userinput)
                         {
@@ -40,6 +46,7 @@ namespace BattleArena
                                 // exit game
                                 run = false;
                                 userinteraction.ExitGame();
+                                logsys.saveToFile();
                                 return ;
                             case 1:
                                 if (currentHero.Name == "Player 1")
@@ -51,7 +58,6 @@ namespace BattleArena
                                     action = currentHero.Action(playerList[0]);
                                 }
                                 break;
-
                             case 2:
                                 action = currentHero.AddLeprechaun();
                                 break;
@@ -64,7 +70,16 @@ namespace BattleArena
                             case 5:
                                 action = currentHero.AddBigGoblin(randomNumberGenerator);
                                 break;
-
+                            case 6:
+                                if(currentHero.weaponName == "Cynrad Bow")
+                                {
+                                    action = currentHero.switchWeapon(new LatharSwordAdapter(randomNumberGenerator));
+                                }
+                                else
+                                {
+                                    action = currentHero.switchWeapon(new CynradBow(randomNumberGenerator));
+                                }
+                                break;
                             default:
                                 break;
                         }
@@ -101,6 +116,7 @@ namespace BattleArena
                     run = false;
                 }
             }
+            logsys.saveToFile();
         }
     }
 }
